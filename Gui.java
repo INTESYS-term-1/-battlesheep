@@ -29,6 +29,8 @@ import javax.swing.UIManager;
 import javax.swing.border.MatteBorder;
 
 import java.awt.GridLayout;
+import java.awt.Point;
+
 import net.miginfocom.swing.MigLayout;
 import javax.swing.SwingConstants;
 
@@ -65,7 +67,7 @@ public class Gui extends JFrame implements ActionListener {
 	private final JButton btnSubmit = new JButton("Done");
 
 	int numberOfSheepsPerPlayer = 0;
-	Boolean isHolding = 0;
+	Boolean isHolding = false;
 
 	public Gui() {
 		rightPanel.setLayout(new MigLayout("", "[185.00][33.00]", "[][][][][][][][][][][][][][][]"));
@@ -114,7 +116,7 @@ public class Gui extends JFrame implements ActionListener {
 		initializeTable();
 		initializeTableLooks();
 
-		// ask number sheeps per player store it in numberOfSheepsPerPlayer
+		// ask number sheep per player store it in numberOfSheepsPerPlayer
 		numberOfSheepsPerPlayer = Integer
 				.parseInt(JOptionPane.showInputDialog(this, "Total number of sheeps per player", "Welcome", 2));
 		totalSheep.setText(Integer.toString(numberOfSheepsPerPlayer));
@@ -128,6 +130,33 @@ public class Gui extends JFrame implements ActionListener {
 						"Where do you want to put all your sheep?", 2)));
 
 		leftPanel.add(table);
+
+		///
+		///
+		///
+		//
+		//
+		//
+		//
+		//
+		//
+		//
+		//
+		//
+		//
+		//
+		table.addMouseListener(new MouseAdapter() {
+			public void mousePressed(MouseEvent e) {
+				if (e.getClickCount() == 2) {
+					System.out.println("double clicked");
+
+					int row = table.getSelectedRow();
+					int column = table.getSelectedColumn();
+					System.out.println(row);
+					System.out.println(column);
+				}
+			}
+		});
 
 	}
 
@@ -172,4 +201,5 @@ public class Gui extends JFrame implements ActionListener {
 		// TODO Auto-generated method stub
 
 	}
+
 }
