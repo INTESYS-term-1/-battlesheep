@@ -5,6 +5,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 import javax.swing.JFrame;
@@ -35,6 +36,8 @@ import net.miginfocom.swing.MigLayout;
 import javax.swing.SwingConstants;
 
 public class Gui extends JFrame implements ActionListener {
+
+	GuiCell[][] guiCells;
 
 	int boardRow = 4;
 	int boardCol = 8;
@@ -123,11 +126,18 @@ public class Gui extends JFrame implements ActionListener {
 
 		// ask where player wants to put all his sheep (where to put stack)
 
-		model.setValueAt(Integer.toString(numberOfSheepsPerPlayer),
-				Integer.parseInt(JOptionPane.showInputDialog(this, "X coordinate:",
-						"Where do you want to put all your sheep?", 2)),
-				Integer.parseInt(JOptionPane.showInputDialog(this, "Y coordinate:",
-						"Where do you want to put all your sheep?", 2)));
+		scanBoard();
+
+		int initialX = Integer.parseInt(
+				JOptionPane.showInputDialog(this, "X coordinate:", "Where do you want to put all your sheep?", 2));
+		int initialY = Integer.parseInt(
+				JOptionPane.showInputDialog(this, "Y coordinate:", "Where do you want to put all your sheep?", 2));
+
+		model.setValueAt(Integer.toString(numberOfSheepsPerPlayer), initialX, initialY);
+
+		guiCells[initialX][initialY] = new GuiCell(initialX, initialY, numberOfSheepsPerPlayer, -1, true);
+
+		printGuiCells();
 
 		leftPanel.add(table);
 
@@ -158,6 +168,32 @@ public class Gui extends JFrame implements ActionListener {
 			}
 		});
 
+	}
+
+	public void scanBoard() {
+		guiCells = new GuiCell[boardRow * 2][boardCol];
+
+		for (int i = 0; i < boardRow * 2; i++) {
+			for (int j = 0; j < boardCol; j++) {
+				if (!table.getValueAt(i, j).toString().equals("0")) {
+					guiCells[i][j] = new GuiCell(i, j, -99, -99, false);
+				} else if (table.getValueAt(j, i).toString().equals("0")) {
+					guiCells[i][j] = new GuiCell(i, j, 0, 0, true);
+				}
+			}
+		}
+
+		printGuiCells();
+
+	}
+
+	public void printGuiCells() {
+		for (int i = 0; i < boardRow * 2; i++) {
+			for (int j = 0; j < boardCol; j++) {
+				guiCells[i][j].print();
+
+			}
+		}
 	}
 
 	public void initializeTableLooks() {

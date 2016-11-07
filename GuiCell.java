@@ -5,9 +5,9 @@ public class GuiCell {
 	int y;
 	int value;
 	int owner; // 1 for AI, 0 for wala, -1 for player
-	int legitCell; // pwede kasi na pader sya or <---> (non existent)
+	Boolean legitCell; // pwede kasi na pader sya or <---> (non existent)
 
-	public GuiCell(int x, int y, int value, int owner, int legitCell) {
+	public GuiCell(int x, int y, int value, int owner, Boolean legitCell) {
 		super();
 		this.x = x;
 		this.y = y;
@@ -48,12 +48,20 @@ public class GuiCell {
 		this.owner = owner;
 	}
 
-	public int getLegitCell() {
+	public Boolean getLegitCell() {
 		return legitCell;
 	}
 
-	public void setLegitCell(int legitCell) {
+	public void setLegitCell(Boolean legitCell) {
 		this.legitCell = legitCell;
+	}
+	
+	public void print(){
+		System.out.println("x: " + x);
+		System.out.println("y: " + y);
+		System.out.println("Value: " + value);
+		System.out.println("Owner: " + owner);
+		System.out.println("Legit?: " + legitCell);
 	}
 
 }
