@@ -71,6 +71,11 @@ public class Gui extends JFrame implements ActionListener {
 
 	int numberOfSheepsPerPlayer = 0;
 	Boolean isHolding = false;
+	int holding = 0;
+
+	int player = -1;
+	int free = 0;
+	int ai = 1;
 
 	public Gui() {
 		rightPanel.setLayout(new MigLayout("", "[185.00][33.00]", "[][][][][][][][][][][][][][][]"));
@@ -114,7 +119,7 @@ public class Gui extends JFrame implements ActionListener {
 
 		splitPane.setSize(1000, 650);
 		splitPane.setVisible(true);
-		splitPane.setDividerLocation(750);
+		splitPane.setDividerLocation(730);
 
 		initializeTable();
 		initializeTableLooks();
@@ -124,10 +129,70 @@ public class Gui extends JFrame implements ActionListener {
 				.parseInt(JOptionPane.showInputDialog(this, "Total number of sheeps per player", "Welcome", 2));
 		totalSheep.setText(Integer.toString(numberOfSheepsPerPlayer));
 
-		// ask where player wants to put all his sheep (where to put stack)
-
+		// scan initial board
 		scanBoard();
 
+		// ask where player wants to put all his sheep (where to put stack)
+		initializePlayerSheep();
+
+		leftPanel.add(table);
+
+		table.addMouseListener(new MouseAdapter() {
+			public void mousePressed(MouseEvent e) {
+				if (e.getClickCount() == 2) {
+
+					int row = table.getSelectedRow();
+					int column = table.getSelectedColumn();
+
+					if (guiCells[row][column].getOwner() == player && isHolding == false) {
+						holding = Integer.parseInt(
+								JOptionPane.showInputDialog("How many sheeps would you like to get from here?", "0"));
+
+						if (Integer.parseInt((String) model.getValueAt(row, column)) - holding > 0 && holding > -1) {
+							model.setValueAt(
+									Integer.toString(
+											Integer.parseInt((String) model.getValueAt(row, column)) - holding),
+									row, column);
+
+							isHolding = true;
+							
+							
+							lblxCoordinate.setText(Integer.toString(row));
+							lblyCoordinate.setText(Integer.toString(column));
+
+
+						} else {
+							isHolding = false; // false parin namansya tho
+							holding = 0;
+							JOptionPane.showInputDialog("Please select a valid value next time.", "Press OK and try again");
+
+
+						}
+
+					}
+
+					if (guiCells[row][column].getOwner() == free && isHolding == true) {
+						model.setValueAt(Integer.toString(holding), row, column);
+						guiCells[row][column] = new GuiCell(row, column, holding, player);
+
+						isHolding = false;
+						holding = 0;
+						
+						
+						lblxCoordinate.setText("none");
+						lblyCoordinate.setText("none");
+
+					}
+
+					System.out.println(row);
+					System.out.println(column);
+				}
+			}
+		});
+
+	}
+
+	public void initializePlayerSheep() {
 		int initialX = Integer.parseInt(
 				JOptionPane.showInputDialog(this, "X coordinate:", "Where do you want to put all your sheep?", 2));
 		int initialY = Integer.parseInt(
@@ -135,39 +200,9 @@ public class Gui extends JFrame implements ActionListener {
 
 		model.setValueAt(Integer.toString(numberOfSheepsPerPlayer), initialX, initialY);
 
-		guiCells[initialX][initialY] = new GuiCell(initialX, initialY, numberOfSheepsPerPlayer, -1, true);
+		guiCells[initialX][initialY] = new GuiCell(initialX, initialY, numberOfSheepsPerPlayer, player);
 
-		printGuiCells();
-
-		leftPanel.add(table);
-
-		///
-		///
-		///
-		//
-		//
-		//
-		//
-		//
-		//
-		//
-		//
-		//
-		//
-		//
-		table.addMouseListener(new MouseAdapter() {
-			public void mousePressed(MouseEvent e) {
-				if (e.getClickCount() == 2) {
-					System.out.println("double clicked");
-
-					int row = table.getSelectedRow();
-					int column = table.getSelectedColumn();
-					System.out.println(row);
-					System.out.println(column);
-				}
-			}
-		});
-
+		// printGuiCells();
 	}
 
 	public void scanBoard() {
@@ -183,7 +218,7 @@ public class Gui extends JFrame implements ActionListener {
 			}
 		}
 
-		printGuiCells();
+		// printGuiCells();
 
 	}
 
@@ -191,7 +226,6 @@ public class Gui extends JFrame implements ActionListener {
 		for (int i = 0; i < boardRow * 2; i++) {
 			for (int j = 0; j < boardCol; j++) {
 				guiCells[i][j].print();
-
 			}
 		}
 	}

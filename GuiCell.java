@@ -16,6 +16,15 @@ public class GuiCell {
 		this.legitCell = legitCell;
 	}
 
+	public GuiCell(int x, int y, int value, int owner) {
+		super();
+		this.x = x;
+		this.y = y;
+		this.value = value;
+		this.owner = owner;
+		this.legitCell = true;
+	}
+
 	public int getX() {
 		return x;
 	}
@@ -55,8 +64,8 @@ public class GuiCell {
 	public void setLegitCell(Boolean legitCell) {
 		this.legitCell = legitCell;
 	}
-	
-	public void print(){
+
+	public void print() {
 		System.out.println("x: " + x);
 		System.out.println("y: " + y);
 		System.out.println("Value: " + value);
