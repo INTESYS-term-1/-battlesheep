@@ -29,6 +29,7 @@ import javax.swing.UIManager;
 import javax.swing.border.MatteBorder;
 
 import java.awt.GridLayout;
+import net.miginfocom.swing.MigLayout;
 
 public class Gui extends JFrame implements ActionListener {
 
@@ -38,19 +39,29 @@ public class Gui extends JFrame implements ActionListener {
 	JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, new JScrollPane(leftPanel),
 			new JScrollPane(rightPanel));
 
-	DefaultTableModel model = new DefaultTableModel();
+	DefaultTableModel model = new DefaultTableModel() {
+
+		@Override
+		public boolean isCellEditable(int row, int column) {
+			// Only the third column
+			return false;
+		}
+	};
+
 	JTable table = new JTable(model);
+	private final JLabel lblBattlesheepDashboard = new JLabel("Battlesheep dashboard:");
+	private final JLabel lblTotalSheepPer = new JLabel("Total sheep per player");
+	private final JLabel totalSheep = new JLabel("n");
 
 	public Gui() {
-		// this.setSize(700, 700);
-		//
-		// this.setLocationRelativeTo(null);
-		// getContentPane().setLayout(null);
-		//
-		// this.setTitle("Battlesheep (Alejandria, Cardano, Matias)");
-		// this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		// this.setResizable(false);
-		// this.setVisible(true);
+		rightPanel.setLayout(new MigLayout("", "[][]", "[][]"));
+		lblBattlesheepDashboard.setFont(new Font("Tahoma", Font.BOLD, 13));
+		
+		rightPanel.add(lblBattlesheepDashboard, "cell 0 0");
+		
+		rightPanel.add(lblTotalSheepPer, "cell 0 1");
+		
+		rightPanel.add(totalSheep, "cell 1 1,aligny baseline");
 
 		this.setSize(1000, 700);
 
@@ -62,21 +73,33 @@ public class Gui extends JFrame implements ActionListener {
 		this.setResizable(false);
 		this.setVisible(true);
 
-		this.add(splitPane);
+		getContentPane().add(splitPane);
 
 		splitPane.setSize(1000, 650);
 		splitPane.setVisible(true);
-		splitPane.setDividerLocation(450);
+		splitPane.setDividerLocation(750);
 
-		// -------------------------------------------------table parts
+		String tite = JOptionPane.showInputDialog(this, "Enter your message", "Messages", 2);
+		
+	
+
+		initializeTable();
+
+		leftPanel.add(table);
+
+	}
+
+	public void initializeTable() {
+		// <----><----><----><---->---------table parts
 
 		table.setRowHeight(30);
 
-		for (int i = 0; i <= 15; i++) {
+		for (int i = 0; i < 15; i++) {
 			model.addColumn("*");
 		}
 
 		TableColumn column = null;
+
 		for (int i = 0; i < 15; i++) {
 			column = table.getColumnModel().getColumn(i);
 			column.setPreferredWidth(50);
@@ -87,9 +110,8 @@ public class Gui extends JFrame implements ActionListener {
 				model.addRow(new Object[] { "0", "<---->", "0", "<---->", "0", "<---->", "0", "<---->", "0", "<---->",
 						"0", "<---->", "0", "<---->", "0" });
 			else
-				model.addRow(new Object[] { "----------", "0", "----------", "0", "----------", "0", "----------", "0",
-						"----------", "0", "----------", "0", "----------", "0", "----------", });
-
+				model.addRow(new Object[] { "|", "0", "<---->", "0", "<---->", "0", "<---->", "0", "<---->", "0",
+						"<---->", "0", "<---->", "0", "|" });
 		}
 
 		// center all data in table
@@ -99,14 +121,6 @@ public class Gui extends JFrame implements ActionListener {
 			centerRenderer.setHorizontalAlignment(JLabel.CENTER);
 			table.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
 		}
-
-		// Color color = UIManager.getColor("Table.gridColor");
-		// MatteBorder border = new MatteBorder(1, 1, 0, 0, color);
-
-		// table.setBorder(border);
-
-		leftPanel.add(table);
-
 	}
 
 	@Override
