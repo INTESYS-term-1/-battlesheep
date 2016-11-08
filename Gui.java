@@ -39,9 +39,9 @@ import javax.swing.SwingConstants;
 
 public class Gui extends JFrame implements ActionListener {
 
-	GuiCell[][] guiCells;
+	GuiCell[][] guiCells = new GuiCell[BOARDROW][BOARDCOLUMN];
 
-	public static int BOARDROW = 4;
+	public static int BOARDROW = 8;
 	public static int BOARDCOLUMN = 8;
 	JPanel leftPanel = new JPanel();
 	JPanel rightPanel = new JPanel();
@@ -84,7 +84,7 @@ public class Gui extends JFrame implements ActionListener {
 		ArrayList<State> visited = new ArrayList<State>();
 		ArrayList<State> nextStates = new ArrayList<State>();
 
-		State initialState = new State(guiCells, null, ai);
+		State initialState = new State(guiCells, null, ai, 0);
 
 		State currState = initialState;
 
@@ -92,16 +92,18 @@ public class Gui extends JFrame implements ActionListener {
 
 		initialState = new State(guiCells);
 
-		explore.add(initialState);
+		explore.add(currState);
 
 		int i = 0;
 
 		while (i < explore.size()) {
+
+			System.out.println("wait");
 			currState = explore.get(i);
 			visited.add(currState);
 
-			//duda
-			if (currState.generateStates().size()==0) {
+			// duda
+			if (currState.generateStates().size() == 0) {
 				currState.computeScore();
 			}
 
@@ -114,46 +116,67 @@ public class Gui extends JFrame implements ActionListener {
 
 					// explore.add(0, s);//uncomment for DFS
 				}
+
 				// count++;
 			}
 			i++;
 		}
 
-		//duda
+		// duda
 		for (int m = 0; m < explore.size(); m++) {
-			if (explore.get(m).generateStates().size()==0) {
+			// if (explore.get(m).generateStates().size() == 0) {
+			if (explore.get(m).generateStates().size() == 0) {
+
 				explore.get(m).computeScore();
 			}
 		}
 
-		for (int j = 0; j < explore.size(); j++) {
+		GuiCell tempBoard[][] = new GuiCell[BOARDROW][BOARDCOLUMN];
+
+		int maxScore = explore.get(0).getScore();
+
+		for (int j = 1; j < explore.size(); j++) {
 			// explore.get(j).printBoard();
 			// System.out.println(explore.get(j).getScore());
 
-//			if (explore.get(j).getLevel() == 1 && explore.get(j).getScore() == 1) {
-//				explore.get(j).printBoard();
-//				board = explore.get(j).getBoard();
-//			} else if (explore.get(j).getLevel() == 1 && explore.get(j).getScore() == 0) {
-//				board = explore.get(j).getBoard();
-//				System.out.println("0");
-//			}
-//			
-			int maxScore = 0;
-			GuiCell tempBoard[][] = new GuiCell[BOARDROW][BOARDCOLUMN];
-			
-			if(explore.get(j).getScore() >=maxScore){
+			// if (explore.get(j).getLevel() == 1 && explore.get(j).getScore()
+			// == 1) {
+			// explore.get(j).printBoard();
+			// board = explore.get(j).getBoard();
+			// } else if (explore.get(j).getLevel() == 1 &&
+			// explore.get(j).getScore() == 0) {
+			// board = explore.get(j).getBoard();
+			// System.out.println("0");
+			// }
+			//
+
+			// && explore.get(j).getLevel() == 1
+			if (explore.get(j).getScore() >= maxScore && explore.get(j).getLevel() == 1) {
 				maxScore = explore.get(j).getScore();
 				tempBoard = explore.get(j).getBoard();
 			}
 
 		}
-		
-		
+		System.out.println("Size ng explore: " + explore.size());
 
-		
+		for (int q = 0; q < BOARDROW; q++) {
+			for (int z = 0; z < BOARDCOLUMN; z++) {
+				System.out.println(tempBoard[q][z].getValue());
+			}
+		}
+
+		for (int i2 = 0; i2 < BOARDROW; i2++) {
+			for (int j = 0; j < BOARDCOLUMN; j++) {
+				model.setValueAt(Integer.toString(tempBoard[i2][j].getValue()), i2, j);
+			}
+		}
+
+		// scanBoard();
 
 		explore = new ArrayList<State>();
 		visited = new ArrayList<State>();
+
+		System.out.println("DONE ALGO");
 
 	}
 
@@ -181,6 +204,16 @@ public class Gui extends JFrame implements ActionListener {
 		rightPanel.add(lblFromYCoordinate, "cell 0 6");
 
 		rightPanel.add(lblyCoordinate, "cell 1 6");
+		btnSubmit.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				Algorithm();
+			}
+		});
+		btnSubmit.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+			}
+		});
 		btnSubmit.setVerticalAlignment(SwingConstants.BOTTOM);
 
 		rightPanel.add(btnSubmit, "cell 0 14,growx");
@@ -209,15 +242,16 @@ public class Gui extends JFrame implements ActionListener {
 				.parseInt(JOptionPane.showInputDialog(this, "Total number of sheeps per player", "Welcome", 2));
 		totalSheep.setText(Integer.toString(numberOfSheepsPerPlayer));
 
-		// scan initial board
-		scanBoard();
+		// // scan initial board
+		// scanBoard();
 
 		// ask where player wants to put all his sheep (where to put stack)
 		initializePlayerSheep();
 
+		model.setValueAt(numberOfSheepsPerPlayer, 2, 0);
+		guiCells[2][0] = new GuiCell(2, 0, numberOfSheepsPerPlayer, ai);
+
 		leftPanel.add(table);
-		
-		
 
 		table.addMouseListener(new MouseAdapter() {
 			public void mousePressed(MouseEvent e) {
@@ -294,23 +328,25 @@ public class Gui extends JFrame implements ActionListener {
 
 		// printGuiCells();
 	}
-
-	public void scanBoard() {
-		guiCells = new GuiCell[BOARDROW * 2][BOARDCOLUMN];
-
-		for (int i = 0; i < BOARDROW * 2; i++) {
-			for (int j = 0; j < BOARDCOLUMN; j++) {
-				if (!table.getValueAt(i, j).toString().equals("0")) {
-					guiCells[i][j] = new GuiCell(i, j, -99, -99, false);
-				} else if (table.getValueAt(j, i).toString().equals("0")) {
-					guiCells[i][j] = new GuiCell(i, j, 0, 0, true);
-				}
-			}
-		}
-
-		// printGuiCells();
-
-	}
+	//
+	// public void scanBoard() {
+	// guiCells = new GuiCell[BOARDROW * 2][BOARDCOLUMN];
+	//
+	// for (int i = 0; i < BOARDROW * 2; i++) {
+	// for (int j = 0; j < BOARDCOLUMN; j++) {
+	// if (!table.getValueAt(i, j).toString().equals("0")) {
+	// guiCells[i][j] = new GuiCell(i, j, -99, -99, false);
+	// } else if (table.getValueAt(j, i).toString().equals("0")) {
+	// guiCells[i][j] = new GuiCell(i, j, 0, 0, true);
+	// } else {
+	//
+	// }
+	// }
+	// }
+	//
+	// // printGuiCells();
+	//
+	// }
 
 	public void printGuiCells() {
 		for (int i = 0; i < BOARDROW * 2; i++) {
@@ -343,7 +379,7 @@ public class Gui extends JFrame implements ActionListener {
 			model.addColumn("*");
 		}
 
-		for (int j = 0; j < BOARDROW * 2; j++) {
+		for (int j = 0; j < BOARDROW; j++) {
 			if (j % 2 == 0)
 				model.addRow(new Object[] { "0", "<---->", "0", "<---->", "0", "<---->", "0", "|||||" });
 			else
@@ -353,6 +389,32 @@ public class Gui extends JFrame implements ActionListener {
 		// center all data in table
 
 		table = new JTable(model);
+
+		guiCells = new GuiCell[BOARDROW][BOARDCOLUMN];
+
+		for (int i = 0; i < BOARDROW; i++) {
+			for (int j = 0; j < BOARDCOLUMN; j++) {
+				if (i % 2 == 0) {
+					if (j % 2 == 0) {
+						guiCells[i][j] = new GuiCell(i, j, 0, free);
+					} else {
+						guiCells[i][j] = new GuiCell(i, j, -99, -99, false);
+					}
+				} else {
+					if (!(j % 2 == 0)) {
+						guiCells[i][j] = new GuiCell(i, j, 0, free);
+					} else {
+						guiCells[i][j] = new GuiCell(i, j, -99, -99, false);
+					}
+				}
+			}
+		}
+
+		for (int i2 = 0; i2 < BOARDROW; i2++) {
+			for (int j = 0; j < BOARDCOLUMN; j++) {
+				model.setValueAt(Integer.toString(guiCells[i2][j].getValue()), i2, j);
+			}
+		}
 
 	}
 
