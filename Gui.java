@@ -33,6 +33,8 @@ import java.awt.GridLayout;
 import java.awt.Point;
 
 import net.miginfocom.swing.MigLayout;
+import tic.TicTacState;
+
 import javax.swing.SwingConstants;
 
 public class Gui extends JFrame implements ActionListener {
@@ -76,6 +78,17 @@ public class Gui extends JFrame implements ActionListener {
 	int player = -1;
 	int free = 0;
 	int ai = 1;
+	
+	
+//	
+//	public void Algorithm(){
+//		ArrayList<State> explore = new ArrayList<State>();
+//		ArrayList<State> visited = new ArrayList<State>();
+//		ArrayList<State> nextStates = new ArrayList<State>();
+//		
+//		State state = new State(guiCells[][], null, ai);
+//
+//	}
 
 	public Gui() {
 		rightPanel.setLayout(new MigLayout("", "[185.00][33.00]", "[][][][][][][][][][][][][][][]"));
