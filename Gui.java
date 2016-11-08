@@ -155,33 +155,41 @@ public class Gui extends JFrame implements ActionListener {
 									row, column);
 
 							isHolding = true;
-							
-							
+
 							lblxCoordinate.setText(Integer.toString(row));
 							lblyCoordinate.setText(Integer.toString(column));
-
+							lblSheepAtHand.setText(Integer.toString(holding));
 
 						} else {
 							isHolding = false; // false parin namansya tho
 							holding = 0;
-							JOptionPane.showInputDialog("Please select a valid value next time.", "Press OK and try again");
-
+							JOptionPane.showInputDialog("Please select a valid value next time.",
+									"Press OK and try again");
 
 						}
 
 					}
 
+					// pag place ngholding sheep
 					if (guiCells[row][column].getOwner() == free && isHolding == true) {
-						model.setValueAt(Integer.toString(holding), row, column);
-						guiCells[row][column] = new GuiCell(row, column, holding, player);
 
-						isHolding = false;
-						holding = 0;
-						
-						
-						lblxCoordinate.setText("none");
-						lblyCoordinate.setText("none");
+						int prevX = Integer.parseInt(lblxCoordinate.getText());
+						int prevY = Integer.parseInt(lblyCoordinate.getText());
 
+						// 1. left diagonal up 2. left diag down 3. right diag
+						// up 4. rright diag down 5. horitzontal
+						if (prevX - row == prevY - column || row - prevX == prevY - column
+								|| prevX - row == column - prevY || row - prevX == column - prevY || prevX == row) {
+							model.setValueAt(Integer.toString(holding), row, column);
+							guiCells[row][column] = new GuiCell(row, column, holding, player);
+
+							isHolding = false;
+							holding = 0;
+
+							lblxCoordinate.setText("none");
+							lblyCoordinate.setText("none");
+							lblSheepAtHand.setText("none");
+						}
 					}
 
 					System.out.println(row);
