@@ -1,4 +1,5 @@
 import java.awt.BorderLayout;
+
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
@@ -33,7 +34,6 @@ import java.awt.GridLayout;
 import java.awt.Point;
 
 import net.miginfocom.swing.MigLayout;
-import tic.TicTacState;
 
 import javax.swing.SwingConstants;
 
@@ -78,17 +78,84 @@ public class Gui extends JFrame implements ActionListener {
 	int player = -1;
 	int free = 0;
 	int ai = 1;
-	
-	
-//	
-//	public void Algorithm(){
-//		ArrayList<State> explore = new ArrayList<State>();
-//		ArrayList<State> visited = new ArrayList<State>();
-//		ArrayList<State> nextStates = new ArrayList<State>();
-//		
-//		State state = new State(guiCells[][], null, ai);
-//
-//	}
+
+	public void Algorithm() {
+		ArrayList<State> explore = new ArrayList<State>();
+		ArrayList<State> visited = new ArrayList<State>();
+		ArrayList<State> nextStates = new ArrayList<State>();
+
+		State initialState = new State(guiCells, null, ai);
+
+		State currState = initialState;
+
+		// loop here
+
+		initialState = new State(guiCells);
+
+		explore.add(initialState);
+
+		int i = 0;
+
+		while (i < explore.size()) {
+			currState = explore.get(i);
+			visited.add(currState);
+
+			//duda
+			if (currState.generateStates().size()==0) {
+				currState.computeScore();
+			}
+
+			nextStates = currState.generateStates();
+			// lowest = findLowestScore(nextStates);
+			for (State s : nextStates) {
+				if (!visited.contains(s) && !explore.contains(s)) {
+					// if(lowest <= s.getScore())
+					explore.add(s);// uncomment for BFS
+
+					// explore.add(0, s);//uncomment for DFS
+				}
+				// count++;
+			}
+			i++;
+		}
+
+		//duda
+		for (int m = 0; m < explore.size(); m++) {
+			if (explore.get(m).generateStates().size()==0) {
+				explore.get(m).computeScore();
+			}
+		}
+
+		for (int j = 0; j < explore.size(); j++) {
+			// explore.get(j).printBoard();
+			// System.out.println(explore.get(j).getScore());
+
+//			if (explore.get(j).getLevel() == 1 && explore.get(j).getScore() == 1) {
+//				explore.get(j).printBoard();
+//				board = explore.get(j).getBoard();
+//			} else if (explore.get(j).getLevel() == 1 && explore.get(j).getScore() == 0) {
+//				board = explore.get(j).getBoard();
+//				System.out.println("0");
+//			}
+//			
+			int maxScore = 0;
+			GuiCell tempBoard[][] = new GuiCell[BOARDROW][BOARDCOLUMN];
+			
+			if(explore.get(j).getScore() >=maxScore){
+				maxScore = explore.get(j).getScore();
+				tempBoard = explore.get(j).getBoard();
+			}
+
+		}
+		
+		
+
+		
+
+		explore = new ArrayList<State>();
+		visited = new ArrayList<State>();
+
+	}
 
 	public Gui() {
 		rightPanel.setLayout(new MigLayout("", "[185.00][33.00]", "[][][][][][][][][][][][][][][]"));
@@ -149,6 +216,8 @@ public class Gui extends JFrame implements ActionListener {
 		initializePlayerSheep();
 
 		leftPanel.add(table);
+		
+		
 
 		table.addMouseListener(new MouseAdapter() {
 			public void mousePressed(MouseEvent e) {

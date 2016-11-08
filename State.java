@@ -20,14 +20,18 @@ public class State {
 
 	int childrenLeft;
 
-	State(int[][] board) {
-	}
+
 
 	public State(GuiCell[][] board, State parent, int nextTurn) {
 		this.board = board;
 		this.parentState = parent;
 		this.currentTurn = nextTurn;
 
+	}
+
+	public State(GuiCell[][] guiCells) {
+		board = guiCells;
+		currentTurn = ai;
 	}
 
 	@Override
