@@ -1,11 +1,12 @@
 
 public class GuiCell {
 
-	int x;
-	int y;
-	int value;
-	int owner; // 1 for AI, 0 for wala, -1 for player
-	Boolean legitCell; // pwede kasi na pader sya or <---> (non existent)
+	private int x;
+	private int y;
+	private int value;
+	private int owner; // 1 for AI, 0 for wala, -1 for player
+	private Boolean legitCell; // pwede kasi na pader sya or <---> (non
+								// existent)
 
 	public GuiCell(int x, int y, int value, int owner, Boolean legitCell) {
 		super();

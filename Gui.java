@@ -98,24 +98,35 @@ public class Gui extends JFrame implements ActionListener {
 
 		while (i < explore.size()) {
 
-			System.out.println("wait");
+			System.out.println("eto pinapasa:");
+			for (int q = 0; q < BOARDROW; q++) {
+				System.out.println();
+				for (int z = 0; z < BOARDCOLUMN; z++) {
+					System.out.print(explore.get(i).getBoard()[q][z].getValue());
+					System.out.print("   |   ");
+				}
+			}
+
+			System.out.println("Triggered algo");
 			currState = explore.get(i);
 			visited.add(currState);
 
 			// duda
-			if (currState.generateStates().size() == 0) {
-				currState.computeScore();
-			}
+			// if (currState.generateStates().size() == 0) {
+			// currState.computeScore();
+			// }
 
 			nextStates = currState.generateStates();
+
 			// lowest = findLowestScore(nextStates);
 			for (State s : nextStates) {
 				if (!visited.contains(s) && !explore.contains(s)) {
-					// if(lowest <= s.getScore())
+					// // if(lowest <= s.getScore())
 					explore.add(s);// uncomment for BFS
-
-					// explore.add(0, s);//uncomment for DFS
+					//
+					// // explore.add(0, s);//uncomment for DFS
 				}
+				// explore.add(s);// uncomment for BFS
 
 				// count++;
 			}
@@ -155,10 +166,13 @@ public class Gui extends JFrame implements ActionListener {
 				maxScore = explore.get(j).getScore();
 				tempBoard = explore.get(j).getBoard();
 			}
+			// maxScore = explore.get(j).getScore();
+			// tempBoard = explore.get(j).getBoard();
 
 		}
 		System.out.println("Size ng explore: " + explore.size());
 
+		System.out.println("eto pinapasa:");
 		for (int q = 0; q < BOARDROW; q++) {
 			for (int z = 0; z < BOARDCOLUMN; z++) {
 				System.out.println(tempBoard[q][z].getValue());
@@ -167,6 +181,8 @@ public class Gui extends JFrame implements ActionListener {
 
 		for (int i2 = 0; i2 < BOARDROW; i2++) {
 			for (int j = 0; j < BOARDCOLUMN; j++) {
+				// guiCells[i2][j].setValue(tempBoard[i2][j].getValue());
+				guiCells = tempBoard;
 				model.setValueAt(Integer.toString(tempBoard[i2][j].getValue()), i2, j);
 			}
 		}
@@ -248,8 +264,8 @@ public class Gui extends JFrame implements ActionListener {
 		// ask where player wants to put all his sheep (where to put stack)
 		initializePlayerSheep();
 
-		model.setValueAt(numberOfSheepsPerPlayer, 2, 0);
-		guiCells[2][0] = new GuiCell(2, 0, numberOfSheepsPerPlayer, ai);
+		model.setValueAt(numberOfSheepsPerPlayer, 6, 6);
+		guiCells[6][6] = new GuiCell(6, 6, numberOfSheepsPerPlayer, ai);
 
 		leftPanel.add(table);
 
@@ -357,12 +373,12 @@ public class Gui extends JFrame implements ActionListener {
 	}
 
 	public void initializeTableLooks() {
-		table.setRowHeight(45);
+		table.setRowHeight(70);
 		TableColumn column = null;
 
 		for (int i = 0; i < 8; i++) {
 			column = table.getColumnModel().getColumn(i);
-			column.setPreferredWidth(45);
+			column.setPreferredWidth(70);
 		}
 		for (int i = 0; i < 8; i++) {
 			DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
