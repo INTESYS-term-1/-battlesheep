@@ -195,50 +195,53 @@ public class State {
 					// check obstacles
 					// else {
 					// upper left diag
-					for (int n = k - 1; n > 0; n--) {
-						if (board[n][n].getOwner() == free) {
-							System.out.println("pasok");
-							if (board[n - 1][n - 1].getOwner() != 0) {
 
-								for (int m = 1; m < board[k][l].getValue(); m++) {
-									System.out.println(m);
+					int loopDone = 0;
+					breakLoop: if (loopDone == 0) {
+						for (int n = k - 1; n > 0; n--) {
+							if (board[n][n].getOwner() == free) {
+								if (board[n - 1][n - 1].getOwner() != 0) {
 
-									// for (int a = 0; a < Gui.BOARDROW; a++) {
-									// for (int b = 0; b < Gui.BOARDCOLUMN; b++)
-									// {
-									// tempBoard[a][b] = board[a][b];
-									// }
-									// }
+									for (int m = 1; m < board[k][l].getValue(); m++) {
+										System.out.println(m);
 
-									GuiCell[][] tempBoard = new GuiCell[Gui.BOARDROW][Gui.BOARDCOLUMN];
-									tempBoard = board;
+										GuiCell[][] tempBoard = new GuiCell[Gui.BOARDROW][Gui.BOARDCOLUMN];
+										tempBoard = board;
 
-									tempBoard[n][n].setOwner(ai);
-									tempBoard[n][n].setValue(m);
-									tempBoard[k][l].setValue(tempBoard[k][l].getValue() - (m));
+										tempBoard[n][n].setOwner(ai);
+										tempBoard[n][n].setValue(m);
+										tempBoard[k][l].setValue(tempBoard[k][l].getValue() - (m));
 
-									State tempState = new State(tempBoard, this, player, level + 1);
+										State tempState = new State(tempBoard, this, player, level + 1);
 
-									// int difference =
-									// this.board[k][l].getValue() - m;
-									//
-									// board[k][l].setValue(board[k][l].getValue()
-									// + m);
-									// State tempState = new State(board, this,
-									// player, level + 1);
-									// tempState.getBoard()[n][n].setOwner(ai);
-									// tempState.getBoard()[n][n].setValue(m);
-									// tempState.getBoard()[k][l].setValue(difference);
-									states.add(tempState);
-									
-//									print(tempBoard);
+										// int difference =
+										// this.board[k][l].getValue() - m;
+										//
+										// board[k][l].setValue(board[k][l].getValue()
+										// + m);
+										// State tempState = new State(board,
+										// this,
+										// player, level + 1);
+										// tempState.getBoard()[n][n].setOwner(ai);
+										// tempState.getBoard()[n][n].setValue(m);
+										// tempState.getBoard()[k][l].setValue(difference);
+										states.add(tempState);
 
-									// culprit
-									board[k][l].setValue(board[k][l].getValue() + m);
+										print(tempState.getBoard());
+
+										// culprit
+										board[k][l].setValue(board[k][l].getValue() + m);
+
+										if (m == board[k][l].getValue() - 1) {
+											loopDone = 1;
+											break breakLoop;
+										}
+									}
+
+									// board[n][n] = new GuiCell(n, n, 0, 0);
 								}
 							}
 						}
-
 					}
 					// // lower right diag
 					// for (int n = k + 1; n < Gui.BOARDROW - 1; n++) {

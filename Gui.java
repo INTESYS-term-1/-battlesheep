@@ -98,14 +98,14 @@ public class Gui extends JFrame implements ActionListener {
 
 		while (i < explore.size()) {
 
-			System.out.println("eto pinapasa:");
-			for (int q = 0; q < BOARDROW; q++) {
-				System.out.println();
-				for (int z = 0; z < BOARDCOLUMN; z++) {
-					System.out.print(explore.get(i).getBoard()[q][z].getValue());
-					System.out.print("   |   ");
-				}
-			}
+//			System.out.println("eto pinapasa:");
+//			for (int q = 0; q < BOARDROW; q++) {
+//				System.out.println();
+//				for (int z = 0; z < BOARDCOLUMN; z++) {
+//					System.out.print(explore.get(i).getBoard()[q][z].getValue());
+//					System.out.print("   |   ");
+//				}
+//			}
 
 			System.out.println("Triggered algo");
 			currState = explore.get(i);
