@@ -39,8 +39,8 @@ public class Gui extends JFrame implements ActionListener {
 
 	GuiCell[][] guiCells;
 
-	int boardRow = 4;
-	int boardCol = 8;
+	public static int BOARDROW = 4;
+	public static int BOARDCOLUMN = 8;
 	JPanel leftPanel = new JPanel();
 	JPanel rightPanel = new JPanel();
 
@@ -214,10 +214,10 @@ public class Gui extends JFrame implements ActionListener {
 	}
 
 	public void scanBoard() {
-		guiCells = new GuiCell[boardRow * 2][boardCol];
+		guiCells = new GuiCell[BOARDROW * 2][BOARDCOLUMN];
 
-		for (int i = 0; i < boardRow * 2; i++) {
-			for (int j = 0; j < boardCol; j++) {
+		for (int i = 0; i < BOARDROW * 2; i++) {
+			for (int j = 0; j < BOARDCOLUMN; j++) {
 				if (!table.getValueAt(i, j).toString().equals("0")) {
 					guiCells[i][j] = new GuiCell(i, j, -99, -99, false);
 				} else if (table.getValueAt(j, i).toString().equals("0")) {
@@ -231,8 +231,8 @@ public class Gui extends JFrame implements ActionListener {
 	}
 
 	public void printGuiCells() {
-		for (int i = 0; i < boardRow * 2; i++) {
-			for (int j = 0; j < boardCol; j++) {
+		for (int i = 0; i < BOARDROW * 2; i++) {
+			for (int j = 0; j < BOARDCOLUMN; j++) {
 				guiCells[i][j].print();
 			}
 		}
@@ -257,11 +257,11 @@ public class Gui extends JFrame implements ActionListener {
 	public void initializeTable() {
 		// <----><----><----><---->---------table parts
 
-		for (int i = 0; i < boardCol; i++) {
+		for (int i = 0; i < BOARDCOLUMN; i++) {
 			model.addColumn("*");
 		}
 
-		for (int j = 0; j < boardRow * 2; j++) {
+		for (int j = 0; j < BOARDROW * 2; j++) {
 			if (j % 2 == 0)
 				model.addRow(new Object[] { "0", "<---->", "0", "<---->", "0", "<---->", "0", "|||||" });
 			else
