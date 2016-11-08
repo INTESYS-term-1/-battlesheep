@@ -56,23 +56,124 @@ public class State {
 							// up 4. rright diag down 5. horitzontal
 							// basically kung abot eto nung ai cell
 							if (i - k == j - l || k - i == j - l || i - k == l - j || k - i == l - j || i == k) {
-								// check if sagad
+								// check if sagad sa board
 								if (k == 0 || k == Gui.BOARDROW || l == 0 || l == Gui.BOARDCOLUMN) {
-									
-								}
-							}
+									if (board[k][l].getOwner() == free) {
 
-							if (board[k][l].getOwner() == 0) {
-								for (int m = 1; m < board[i][j].getValue(); m++) {
-									if (k != i && j != l) {
-										tempState = new State(this.board, this, player);
-										tempState.getBoard()[k][l].setOwner(ai);
-										tempState.getBoard()[k][l].setValue(m);
-										states.add(tempState);
+										for (int m = 1; m < board[i][j].getValue(); m++) {
+											if (k != i && j != l) {
+												tempState = new State(this.board, this, player);
+												tempState.getBoard()[k][l].setOwner(ai);
+												tempState.getBoard()[k][l].setValue(m);
+												states.add(tempState);
+											}
+
+										}
+
+									}
+								}
+								// check obstacles
+								else {
+									// upper left diag
+									for (int n = i - 1; n > 0; n--) {
+										if (board[n - 1][n - 1].getOwner() != free) {
+											for (int m = 1; m < board[i][j].getValue(); m++) {
+												if (k != i && j != l) {
+													tempState = new State(this.board, this, player);
+													tempState.getBoard()[n][n].setOwner(ai);
+													tempState.getBoard()[n][n].setValue(m);
+													states.add(tempState);
+												}
+
+											}
+										}
+
+									}
+									// lower right diag
+									for (int n = i + 1; n < Gui.BOARDROW - 1; n++) {
+										if (board[n + 1][n + 1].getOwner() != free) {
+											for (int m = 1; m < board[i][j].getValue(); m++) {
+												if (k != i && j != l) {
+													tempState = new State(this.board, this, player);
+													tempState.getBoard()[n][n].setOwner(ai);
+													tempState.getBoard()[n][n].setValue(m);
+													states.add(tempState);
+												}
+
+											}
+										}
+
+									}
+
+									// for left horizontal
+									for (int n = i - 1; n > 0; n--) {
+										if (board[k][n - 1].getOwner() != free) {
+											for (int m = 1; m < board[i][j].getValue(); m++) {
+												if (k != i && j != l) {
+													tempState = new State(this.board, this, player);
+													tempState.getBoard()[k][n].setOwner(ai);
+													tempState.getBoard()[k][n].setValue(m);
+													states.add(tempState);
+												}
+
+											}
+										}
+
+									}
+
+									// for right horizontal
+									for (int n = i + 1; n < Gui.BOARDCOLUMN - 1; n++) {
+										if (board[k][n + 1].getOwner() != free) {
+											for (int m = 1; m < board[i][j].getValue(); m++) {
+												if (k != i && j != l) {
+													tempState = new State(this.board, this, player);
+													tempState.getBoard()[k][n].setOwner(ai);
+													tempState.getBoard()[k][n].setValue(m);
+													states.add(tempState);
+												}
+
+											}
+										}
+									}
+
+									// for left diagonal down
+									int o = j - 1;
+									for (int n = i + 1; n < Gui.BOARDCOLUMN; n++) {
+
+										if (board[n + 1][o - 1].getOwner() != free) {
+											for (int m = 1; m < board[i][j].getValue(); m++) {
+												if (k != i && j != l) {
+													tempState = new State(this.board, this, player);
+													tempState.getBoard()[n][o].setOwner(ai);
+													tempState.getBoard()[n][o].setValue(m);
+													states.add(tempState);
+												}
+
+											}
+										}
+										o--;
+									}
+
+									// for right diagonal down
+									int p = j + 1;
+									for (int n = i - 1; n < 0; n--) {
+										if (board[n - 1][o + 1].getOwner() != free) {
+											for (int m = 1; m < board[i][j].getValue(); m++) {
+												if (k != i && j != l) {
+													tempState = new State(this.board, this, player);
+													tempState.getBoard()[n][o].setOwner(ai);
+													tempState.getBoard()[n][o].setValue(m);
+													states.add(tempState);
+												}
+
+											}
+										}
+										p++;
 									}
 
 								}
 							}
+
 						}
 					}
 
