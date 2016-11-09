@@ -20,11 +20,18 @@ public class State {
 
 	int childrenLeft;
 
-	State(int[][] board) {
+	State(GuiCell[][] board) {
+		for (int i = 0; i < board.length ; i++) {
+			this.board = board.clone();
+		}
+		parentState = null;
+		currentTurn = player;
 	}
 
 	public State(GuiCell[][] board, State parent, int nextTurn) {
-		this.board = board;
+		for (int i = 0; i < board.length ; i++) {
+			this.board = board.clone();
+		}
 		this.parentState = parent;
 		this.currentTurn = nextTurn;
 

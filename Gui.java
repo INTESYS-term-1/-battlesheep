@@ -33,7 +33,7 @@ import java.awt.GridLayout;
 import java.awt.Point;
 
 import net.miginfocom.swing.MigLayout;
-import tic.TicTacState;
+
 
 import javax.swing.SwingConstants;
 
@@ -89,6 +89,95 @@ public class Gui extends JFrame implements ActionListener {
 //		State state = new State(guiCells[][], null, ai);
 //
 //	}
+	public void mainLoop(){
+		int lowest;
+		ArrayList<State> explore = new ArrayList<State>();
+		ArrayList<State> visited = new ArrayList<State>();
+		ArrayList<State> nextStates = new ArrayList<State>();
+
+
+
+		State currState = new  State(guiCells);
+
+
+
+		final long startTime = System.currentTimeMillis();
+
+		int inputX = 0;
+		int inputY = 0;
+
+		int round = 0;
+
+		do {
+			System.out.println();
+
+
+
+			initialState = new State(board);
+
+			explore.add(initialState);
+			int i = 0;
+			while (i < explore.size()) {
+				currState = explore.get(i);
+				visited.add(currState);
+
+
+
+				nextStates = currState.generateStates();
+
+				if(nextStates.isEmpty())
+					currState.computeScore();
+
+				// lowest = findLowestScore(nextStates);
+				for (State s : nextStates) {
+					if (!visited.contains(s) && !explore.contains(s)) {
+						explore.add(s);// uncomment for BFS
+						// explore.add(0, s);//uncomment for DFS
+					}
+					// count++;
+				}
+				i++;
+			}
+
+//			for(int m=0; m < explore.size(); m++){
+//				if(explore.get(m).isLeaf()){
+//					explore.get(m).computeScore();
+//				}
+//			}
+
+			for (int j = 0; j < explore.size(); j++) {
+				// explore.get(j).printBoard();
+				// System.out.println(explore.get(j).getScore());
+
+				if (explore.get(j).getLevel() == 1 && explore.get(j).getScore() == 1) {
+					explore.get(j).printBoard();
+					board = explore.get(j).getBoard();
+				} else if (explore.get(j).getLevel() == 1 && explore.get(j).getScore() == 0) {
+					board = explore.get(j).getBoard();
+					System.out.println("0");
+				}
+
+			}
+
+			System.out.println();
+			System.out.println("Board: ");
+
+			for (int k = 0; k < 3; k++) {
+				System.out.println();
+
+				for (int l = 0; l < 3; l++) {
+					System.out.print(board[k][l].getValue());
+					System.out.print(" | ");
+				}
+			}
+
+			explore = new ArrayList<State>();
+			visited = new ArrayList<State>();
+
+			round++;
+		} while (inputX < 3 && inputY < 3);
+
+	}
 
 	public Gui() {
 		rightPanel.setLayout(new MigLayout("", "[185.00][33.00]", "[][][][][][][][][][][][][][][]"));
