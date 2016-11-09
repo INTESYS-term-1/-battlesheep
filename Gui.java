@@ -165,17 +165,23 @@ public class Gui extends JFrame implements ActionListener {
 			if (explore.get(j).getScore() >= maxScore && explore.get(j).getLevel() == 1) {
 				maxScore = explore.get(j).getScore();
 				tempBoard = explore.get(j).getBoard();
+				System.out.println();
+				System.out.println("LEVEL: ");
+				System.out.println((explore.get(j).getLevel()));
 			}
 			// maxScore = explore.get(j).getScore();
 			// tempBoard = explore.get(j).getBoard();
 
 		}
+
 		System.out.println("Size ng explore: " + explore.size());
 
 		System.out.println("eto pinapasa:");
 		for (int q = 0; q < BOARDROW; q++) {
 			for (int z = 0; z < BOARDCOLUMN; z++) {
-				System.out.println(tempBoard[q][z].getValue());
+				// System.out.println(tempBoard[q][z].getValue());
+				tempBoard[q][z].getValue();
+
 			}
 		}
 
@@ -191,8 +197,6 @@ public class Gui extends JFrame implements ActionListener {
 
 		explore = new ArrayList<State>();
 		visited = new ArrayList<State>();
-
-		System.out.println("DONE ALGO");
 
 	}
 
@@ -385,6 +389,7 @@ public class Gui extends JFrame implements ActionListener {
 			DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
 			centerRenderer.setHorizontalAlignment(JLabel.CENTER);
 			table.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
+
 		}
 
 	}
@@ -426,7 +431,17 @@ public class Gui extends JFrame implements ActionListener {
 				}
 			}
 		}
-
+		
+		
+		class CustomRenderer extends DefaultTableCellRenderer <br />
+		{
+		    public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column)
+		    {
+		        Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+		        setForeground(Color.blue); >
+		        return c;
+		    }
+		}
 		for (int i2 = 0; i2 < BOARDROW; i2++) {
 			for (int j = 0; j < BOARDCOLUMN; j++) {
 				model.setValueAt(Integer.toString(guiCells[i2][j].getValue()), i2, j);

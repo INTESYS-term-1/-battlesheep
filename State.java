@@ -129,15 +129,15 @@ public class State {
 
 	public void print(GuiCell[][] dummy) {
 
-		for (int j = 0; j < Gui.BOARDROW; j++) {
-			System.out.println();
-			for (int z = 0; z < Gui.BOARDCOLUMN; z++) {
-				System.out.print(dummy[j][z].getValue());
-				System.out.print("  |   ");
-
-			}
-
-		}
+//		for (int j = 0; j < Gui.BOARDROW; j++) {
+//			System.out.println();
+//			for (int z = 0; z < Gui.BOARDCOLUMN; z++) {
+//				System.out.print(dummy[j][z].getValue());
+//				System.out.print("  |   ");
+//
+//			}
+//
+//		}
 	}
 
 	public ArrayList<State> generateStates() {
