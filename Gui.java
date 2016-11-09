@@ -98,14 +98,14 @@ public class Gui extends JFrame implements ActionListener {
 
 		while (i < explore.size()) {
 
-//			System.out.println("eto pinapasa:");
-//			for (int q = 0; q < BOARDROW; q++) {
-//				System.out.println();
-//				for (int z = 0; z < BOARDCOLUMN; z++) {
-//					System.out.print(explore.get(i).getBoard()[q][z].getValue());
-//					System.out.print("   |   ");
-//				}
-//			}
+			// System.out.println("eto pinapasa:");
+			// for (int q = 0; q < BOARDROW; q++) {
+			// System.out.println();
+			// for (int z = 0; z < BOARDCOLUMN; z++) {
+			// System.out.print(explore.get(i).getBoard()[q][z].getValue());
+			// System.out.print(" | ");
+			// }
+			// }
 
 			System.out.println("Triggered algo");
 			currState = explore.get(i);
@@ -264,8 +264,9 @@ public class Gui extends JFrame implements ActionListener {
 		// ask where player wants to put all his sheep (where to put stack)
 		initializePlayerSheep();
 
-		model.setValueAt(numberOfSheepsPerPlayer, 6, 6);
-		guiCells[6][6] = new GuiCell(6, 6, numberOfSheepsPerPlayer, ai);
+		// AI set
+		model.setValueAt(numberOfSheepsPerPlayer, 2, 4);
+		guiCells[2][4] = new GuiCell(2, 4, numberOfSheepsPerPlayer, ai);
 
 		leftPanel.add(table);
 
